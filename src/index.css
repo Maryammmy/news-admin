@@ -1,0 +1,156 @@
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  direction: rtl;
+  background-color: #f8f9fa;
+  font-family: "Cairo", sans-serif;
+  font-optical-sizing: auto;
+  font-weight:500;
+  font-style: normal;
+  font-variation-settings: "slnt" 0;
+}
+.direction{
+  direction: ltr;
+}
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+.logo{
+  width: 320px;
+  height: 100px;
+}
+.nav-link{
+  font-weight: 800 ;
+  border-radius: 4px;
+  color: black ;
+  font-size: 17px;
+}
+.nav-link:hover{
+  background-color: #010026;
+  color: #F7AE0D;
+}
+
+.italic{
+  font-weight: 700;
+  color: #F7AE0D;
+}
+.navbar-nav .nav-link.active{
+  background-color:#19DBBF;
+}
+  .w-60{
+    width: 60%;
+  }
+.w-img{
+  width: 350px;
+  height: 200px;
+  overflow: hidden;
+}
+.w-img img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: all 0.5s;
+}
+.w-img img:hover{
+  transform: scale(1.2);
+}
+.header-brdr{
+border-bottom: 2px solid  #F7AE0D;
+}
+.main-bg{
+  background-color: #F7AE0D;
+}
+.icon{
+  width: 35px;
+  height: 35px;
+  background-color: #F7AE0D;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+
+}
+.icon:hover{
+  background-color: #19DBBF;
+}
+.contact-bg{
+  background-color: gainsboro;
+}
+.contact-brdr{
+  border-bottom: 1px solid whitesmoke;
+}
+.icon-white{
+  width: 35px;
+  height: 35px;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+}
+.icon-white .color{
+  color: #F7AE0D;
+}
+.time{
+  color: #F7AE0D;
+}
+.but:hover{
+  color: #F7AE0D;
+}
+.brdr-top{
+  border-top: 2px solid  #F7AE0D;
+}
+.brdr-bottom{
+border-bottom: 2px solid gainsboro;
+}
+
+.uploaded-image{
+  width: 100%;
+  height: 100%;
+  /* border-radius: 50%; */
+  object-fit: cover;
+} 
+.butt:hover{
+background-color: white;
+color: #F7AE0D !important;
+}
+.placeholder-icon{
+font-size: 30px;
+  color: rgba(69, 90, 100, 0.5);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+ 
+}
+
+.div-img{
+height: 200px;
+width: 610px;
+display: flex;
+justify-content: center;
+align-items: center;
+background-color: white;
+object-fit: cover;
+}
+.padding{
+  padding-right: 130px;
+}
+.margin{
+  margin-right: 130px;
+}
+@media (max-width:575px) {
+  .w-60{
+    width: 100%;
+  }
+}
+@media (min-width:576px) and (max-width:767px) {
+.w-60{
+  width: 100%;
+}
+
+}
