@@ -63,6 +63,10 @@ const Home = () => {
       console.error("Error deleting document:", firebaseId, error);
     }
   };
+  function UpdateClick(item) {
+    setSelected(item);
+    navigate('/updateArticle');
+  }
   
   return (
     <div className=' w-60 bg-white my-3 shadow margin'>
@@ -77,7 +81,7 @@ const Home = () => {
             <div key={index} className="row py-3 brdr-bottom ">
               <div className="col-md-5">
                 <div className='w-img'>
-                  <img src={article.images[0]} alt={`Image`} />
+                  <img src={article?.images?.[0]} alt={`Image`} />
                 </div>
               </div>
               <div className="col-md-7">
@@ -88,6 +92,7 @@ const Home = () => {
                   {console.log(article.firebaseId)}
                   deleteArticleFromFirestore(article.firebaseId)
                 }} className="fa-solid fa-trash-can"></i>
+                 <button onClick={() => UpdateClick(article)}><i className="fa-solid fa-pencil"></i></button>
                
               </div>
             </div>

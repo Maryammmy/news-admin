@@ -27,7 +27,7 @@ export default function Title() {
           </div>
           <div className="col-md-12 py-1">
             <div className='w-img'>
-              <img src={selected.images ? selected.images[0] : ''} alt={'Image'} />
+              <img src={selected.images ? selected.images?.[0] : ''} alt={'Image'} />
             </div>
           </div>
           <div className="col-md-6 py-1">
