@@ -58,7 +58,7 @@ code {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: all 0.5s;
+ 
 }
 .w-img img{
   width: 100%;
@@ -66,15 +66,17 @@ code {
   object-fit: cover;
   transition: all 0.5s;
 }
-
 .w-img img:hover{
   transform: scale(1.2);
+}
+.margin{
+  margin-right: 130px;
 }
 .header-brdr{
 border-bottom: 2px solid  #F7AE0D;
 }
 .main-bg{
-  background-color: #F7AE0D;
+  background-color: #F7AE0D ;
 }
 .icon{
   width: 35px;
@@ -122,16 +124,25 @@ border-bottom: 2px solid gainsboro;
 .color{
   color: #F7AE0D;
 }
+.wrap-text {
+  white-space: pre-wrap;
+}
+
 .uploaded-image{
   width: 100%;
   height: 100%;
   /* border-radius: 50%; */
   object-fit: cover;
 } 
-.butt:hover{
-background-color: white;
-color: #F7AE0D !important;
-}
+
+.btn:hover {
+  color: none !important;
+  background-color: none !important; 
+   border-color: none!important;
+ } 
+ .but{
+  background-color: #F7AE0D !important;
+ }
 .placeholder-icon{
 font-size: 30px;
   color: rgba(69, 90, 100, 0.5);
@@ -143,10 +154,9 @@ font-size: 30px;
   align-items: center;
  
 }
-
 .div-img{
 height: 200px;
-width: 610px;
+width: 690px;
 display: flex;
 justify-content: center;
 align-items: center;
@@ -156,9 +166,7 @@ object-fit: cover;
 .padding{
   padding-right: 130px;
 }
-.margin{
-  margin-right: 130px;
-}
+
 @media (max-width:575px) {
   .w-60{
     width: 100%;

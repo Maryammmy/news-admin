@@ -56,22 +56,12 @@ export default function Navbar() {
             </ul>
 
           </div>
-          <Link to='/createArticle'> <i className="fa-solid fa-circle-plus italic px-2 py-1  fs-5"></i></Link>
-          <i className="fa-solid fa-bars  italic px-2 py-1" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"></i>
+          <Link to='/createArticle'> <i className="fa-solid fa-circle-plus italic px-2 py-1 fs-3"></i></Link>
+          
         </div>
       </nav>
 
-      <div className="offcanvas offcanvas-end" tabIndex={-1} id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
-        <div className="offcanvas-header">
-          <h5 className="offcanvas-title" id="offcanvasRightLabel">Offcanvas right</h5>
-          <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" />
-        </div>
-        <div className="offcanvas-body">
-          ...
-        </div>
-
-      </div>
-
+     
     </div>
 
   )

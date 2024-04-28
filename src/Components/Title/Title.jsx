@@ -32,10 +32,13 @@ export default function Title() {
           </div>
          
           <div className="col-md-12 py-1">
-            <p className='text-break fs-5'>
-            {selected?.categoryName == 'مالتي ميديا' ? 
-             '':  selected?.description}
-            </p>
+          <p className='text-break fs-5 wrap-text'>
+  {selected?.categoryName === 'مالتي ميديا' ? 
+    '' : 
+    selected?.description}
+</p>
+
+
           </div>
           <div className="col-md-12 py-1">
             {selected?.categoryName == 'مالتي ميديا' ? 

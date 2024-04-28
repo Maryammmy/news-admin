@@ -281,7 +281,7 @@ const CreateArticle = () => {
               <div className='alert alert-danger form-control w-25'>{article.errors.youtubeUrl}</div>
             )}
 
-            <button className='my-2 btn main-bg text-white fw-bolder butt' type="submit" >{btnloading ? <Loading /> : 'إنشاء مقال'}</button> {/* Disable submit button during upload */}
+            <button className='my-2 main-bg btn  text-white fw-bolder but' type="submit" >{btnloading ? <Loading /> : 'إنشاء مقال'}</button> {/* Disable submit button during upload */}
           </div>
         </form>
       </div>
