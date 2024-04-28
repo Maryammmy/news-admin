@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { doc, getDoc, collection, query, where, getDocs,deleteDoc } from "firebase/firestore"; // Add these imports
 import { db } from '../../Firebase/Firebase';
 
-const Home = () => {
+const Media = () => {
   const { setSelected } = useContext(storecontext);
   const navigate = useNavigate();
   const [articleData, setArticleData] = useState([]);
@@ -74,30 +74,36 @@ const Home = () => {
         <p>Loading...</p>
       ) : (
         <>
-        <h4 className=' px-2 py-2 shadow brdr-top brdr-bottom fw-bolder'>انفوجراف</h4>
+        <h4 className=' px-2 py-2 shadow brdr-top brdr-bottom fw-bolder'>مالتي ميديا</h4>
         <div className='container-fluid'>
          
-          {articleData.map((article, index) => (
-            <div key={index} className="row py-3 brdr-bottom ">
-              <div className="col-md-5">
-                <div className='w-img'>
-                  <img src={article?.images?.[0]} alt={`Image`} />
-                </div>
-              </div>
-              <div className="col-md-7">
-                <button className='btn text-end but border-0 pe-0'><h5 className='fw-bolder'>{article.title}</h5> </button>
-                <p>{article.description}</p>
-                <p className='time'>{article.date}</p>
-                <i onClick={()=>{
-                  {console.log(article.firebaseId)}
-                  deleteArticleFromFirestore(article.firebaseId)
-                }} className="fa-solid fa-trash-can"></i>
-                 <button onClick={() => UpdateClick(article)}><i className="fa-solid fa-pencil"></i></button>
-               
-              </div>
-            </div>
-          ))}
-        </div>
+         {articleData.map((article, index) => (
+           <div key={index} className="row py-3 brdr-bottom ">
+             <div className="col-md-4" onClick={()=>{
+               handleTitleClick(article)
+             }}>
+               <div className='w-img'>
+                 <img src={article?.images?.[0]} alt={`Image`} />
+               </div>
+             </div>
+             <div className="col-md-7" onClick={()=>{
+               handleTitleClick(article)
+             }}>
+               <h3 className='fw-bolder title '>{article.title}</h3>
+              
+               <p className='time'>{article.date}</p>
+              
+             </div>
+             <div className='pt-2'>
+             <button className='btn color px-0' onClick={()=>{
+                 deleteArticleFromFirestore(article.firebaseId)
+               }}><i className="fa-solid fa-trash-can"></i> </button>
+                <button className='btn color px-4' onClick={() => UpdateClick(article)}><i className="fa-solid fa-pencil"></i></button>
+              
+             </div>
+           </div>
+         ))}
+       </div>
         </>
 
       )}
@@ -105,4 +111,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Media;

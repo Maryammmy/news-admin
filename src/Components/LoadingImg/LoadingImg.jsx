@@ -5,7 +5,7 @@ export default function LoadingImg() {
   return (
    
     <div>
-        <div class="loader"></div>
+        <div className="loader"></div>
         <div>
             <p className='fs-5'>جاري الحفظ...</p>
             </div>

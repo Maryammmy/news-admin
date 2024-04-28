@@ -23,23 +23,27 @@ export default function Title() {
       <div className='container-fluid'>
         <div className="row py-3 px-2"  >
           <div className="col-md-12">
-            <h5 className='fw-bolder'>{selected?.title}</h5>
+            <h3 className='fw-bolder title'>{selected?.title}</h3>
           </div>
           <div className="col-md-12 py-1">
-            <div className='w-img'>
-              <img src={selected.images ? selected.images?.[0] : ''} alt={'Image'} />
+            <div className='w-image'>
+              <img src={selected?.images?.[0] ? selected?.images?.[0] : ''} alt={'Image'} />
             </div>
           </div>
-          <div className="col-md-6 py-1">
-            <p>{selected?.description}</p>
+         
+          <div className="col-md-12 py-1">
+            <p className='text-break fs-5'>
+            {selected?.categoryName == 'مالتي ميديا' ? 
+             '':  selected?.description}
+            </p>
           </div>
           <div className="col-md-12 py-1">
-            {selected?.youtubeUrl && (
+            {selected?.categoryName == 'مالتي ميديا' ? 
               <YouTube videoId={extractVideoId(selected?.youtubeUrl)} opts={{ height: '200', width: '300', playerVars: { autoplay: 0 } }} />
-            )}
+           :'' }
           </div>
           <div className="col-md-12 py-1">
-            <p>{selected?.date}</p>
+            <p className='time'>{selected?.date}</p>
           </div>
         </div>
       </div>
