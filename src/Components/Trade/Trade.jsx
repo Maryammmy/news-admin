@@ -81,8 +81,8 @@ const Trade = () => {
         {loading ? <CardSkeleton cards={10}/> : (
           <div className='container-fluid'>
             {articleData.map((article, index) => (
-              <div key={index} className="row py-3 brdr-bottom px-2">
-                <div className="col-md-4" onClick={() => handleTitleClick(article)}>
+              <div key={index} className="row py-3 brdr-bottom px-3">
+                <div className="col-md-4 pe-0" onClick={() => handleTitleClick(article)}>
                   <div className='w-img'>
                     <img src={article?.images?.[0]} alt={`Image`} />
                   </div>
