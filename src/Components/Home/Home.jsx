@@ -86,7 +86,7 @@ const Home = () => {
                   </div>
                 </div>
                 <div className="col-md-7 padding-right pe-xl-4 pe-xxl-0" onClick={() => handleTitleClick(article)}>
-                  <h4 className='fw-bolder title pt-4 pt-md-0'>{article.title}</h4>
+                  <h4 className='fw-bolder title pt-3 pt-md-0'>{article.title}</h4>
                   <p className='time'>{formatDate(article.date)}</p>
                 </div>
                 <div className='pt-2'>
