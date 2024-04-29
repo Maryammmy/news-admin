@@ -13,6 +13,7 @@ import Firebase from './Firebase/Firebase';
 import CreateArticle from './Components/CreateArticle/CreateArticle';
 import LoadingImg from './Components/LoadingImg/LoadingImg';
 import UpdateArticle from './Components/UpdateArticle/UpdateArticle';
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 
 
 export default function App() {
@@ -40,9 +41,12 @@ export default function App() {
   ]);
   return (
     <div>
+      <SkeletonTheme baseColor="#88888833">
       <Context>
       <RouterProvider router={routes}/>
       </Context>
+      </SkeletonTheme>
+     
       
     </div>
   )

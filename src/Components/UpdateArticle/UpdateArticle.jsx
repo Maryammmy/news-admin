@@ -25,6 +25,8 @@ const UpdateArticle = () => {
   const today = new Date().toISOString().split('T')[0];
   const [categoryId, setCategoryId] = useState(selected.categoryId)
   const [showModal, setShowModal] = useState('')
+console.log(selected)
+
 
   const handleImageChange = async (event) => {
     const selectedImages = event.target.files;
@@ -122,8 +124,7 @@ const UpdateArticle = () => {
       const articleRef = doc(db, "Artciles", selected.firebaseId);
       await updateDoc(articleRef, updatedArticleData);
       setBtnLoading(false);
-      console.log("Document successfully updated!");
-      console.log(updatedArticleData)
+      window.history.go(-1); 
     } catch (error) {
       console.error("Error updating document: ", error);
       setBtnLoading(false);
@@ -156,7 +157,7 @@ const UpdateArticle = () => {
   const article = useFormik({
     initialValues: {
       title: selected?.title,
-      date: today,
+      date: selected?.date,
       description: selected?.description,
       youtubeUrl: selected?.youtubeUrl,
       images: [selected?.images?.[0]],
@@ -191,7 +192,7 @@ const UpdateArticle = () => {
 
   return (
     <>
-      <div className='padding' >
+      <div className='pe-lg-5' >
         <form onSubmit={article.handleSubmit} className=' py-3'>
           <div className=''>
             <div className='my-2'>
@@ -217,14 +218,14 @@ const UpdateArticle = () => {
 
               />
                {article.touched.images && article.errors.images && (
-              <div className='alert alert-danger form-control w-50'>{article.errors.images}</div>)}
-              {imageError && <div className="alert alert-danger form-control w-50">{imageError}</div>}
+              <div className='alert alert-danger form-control w-input'>{article.errors.images}</div>)}
+              {imageError && <div className="alert alert-danger form-control w-input">{imageError}</div>}
             </div>
             <select
               name="categoryName"
               value={article.values.categoryName}
               onChange={handleSelectChange}
-              className='my-2 form-control w-50'
+              className='my-2 form-control w-input'
             >
               <option value="عام">عام</option>
               <option value="السيارات">السيارات</option>
@@ -240,11 +241,11 @@ const UpdateArticle = () => {
               onChange={article.handleChange}
               onBlur={article.handleBlur}
               placeholder="Date"
-              className='form-control w-50 my-2'
+              className='form-control w-input my-2'
             />
 
             {article.touched.date && article.errors.date && (
-              <div className='alert alert-danger form-control w-50'>{article.errors.date}</div>
+              <div className='alert alert-danger form-control w-input'>{article.errors.date}</div>
             )}
             <input
               type="text"
@@ -253,10 +254,10 @@ const UpdateArticle = () => {
               onChange={article.handleChange}
 
               placeholder="عنوان"
-              className='form-control w-50 my-2'
+              className='form-control w-input my-2'
             />
             {article.touched.title && article.errors.title && (
-              <div className='alert alert-danger form-control w-50'>{article.errors.title}</div>
+              <div className='alert alert-danger form-control w-input'>{article.errors.title}</div>
             )}
             {showTextarea ? <textarea
               name="description"
@@ -265,11 +266,11 @@ const UpdateArticle = () => {
               value={article.values.description}
               onChange={article.handleChange}
               placeholder="مقال..."
-              className='form-control w-50 my-2'
+              className='form-control w-input my-2'
             /> : ''}
 
             {article.touched.description && article.errors.description && (
-              <div className='alert alert-danger form-control w-50'>{article.errors.description}</div>
+              <div className='alert alert-danger form-control w-input'>{article.errors.description}</div>
             )}
 
 
@@ -282,11 +283,11 @@ const UpdateArticle = () => {
               onChange={article.handleChange}
 
               placeholder="Youtube URL"
-              className='form-control w-50 my-2'
+              className='form-control w-input my-2'
             /> : ''}
 
             {article.touched.youtubeUrl && article.errors.youtubeUrl && (
-              <div className='alert alert-danger form-control w-50'>{article.errors.youtubeUrl}</div>
+              <div className='alert alert-danger form-control w-input'>{article.errors.youtubeUrl}</div>
             )}
 
             <button className='my-2 btn  text-white fw-bolder but' type="submit" >{btnloading ? <Loading /> : 'تعديل مقال'}</button> {/* Disable submit button during upload */}

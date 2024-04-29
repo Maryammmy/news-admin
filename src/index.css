@@ -31,7 +31,6 @@ code {
   background-color: #010026;
   color: #F7AE0D;
 }
-
 .italic{
   font-weight: 700;
   color: #F7AE0D;
@@ -39,8 +38,12 @@ code {
 .navbar-nav .nav-link.active{
   background-color:#19DBBF;
 }
-  .w-60{
-    width: 60%;
+.placeholder-icon{
+  font-size: 30px;
+   color: rgba(69, 90, 100, 0.5);
+  }
+.w-60{
+    width: 70%;
   }
 .w-img{
   width: 270px;
@@ -49,7 +52,7 @@ code {
   overflow: hidden;
 }
 .w-image{
-  width: 880px;
+  width: 800px;
   height: 400px;
   border: 2px solid gainsboro;
   overflow: hidden;
@@ -68,9 +71,6 @@ code {
 }
 .w-img img:hover{
   transform: scale(1.2);
-}
-.margin{
-  margin-right: 130px;
 }
 .header-brdr{
 border-bottom: 2px solid  #F7AE0D;
@@ -145,36 +145,111 @@ border-bottom: 2px solid gainsboro;
  }
 .placeholder-icon{
 font-size: 30px;
-  color: rgba(69, 90, 100, 0.5);
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
- 
+ color: rgba(69, 90, 100, 0.5);
 }
 .div-img{
 height: 200px;
-width: 690px;
+width: 730px;
 display: flex;
 justify-content: center;
 align-items: center;
 background-color: white;
 object-fit: cover;
+/* text-align: center; */
 }
-.padding{
-  padding-right: 130px;
+.padding-right{
+  padding-right: 0px;
+ }
+.w-input{
+  width: 50%;
+}
+.skeleton-animation {
+  animation: pulse 1.5s ease-in-out infinite;
 }
 
+@keyframes pulse {
+  0% {
+    opacity: 0.1;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.2;
+  }
+}
 @media (max-width:575px) {
   .w-60{
     width: 100%;
   }
+  .div-img{
+    height: 150px;
+    width: 480px;
+    }
+    .w-input{
+      width: 100%;
+    }
+    .w-image{
+      width: 450px;
+      height: 200px;
+    
+    }
 }
 @media (min-width:576px) and (max-width:767px) {
 .w-60{
   width: 100%;
 }
+.div-img{
+  height: 150px;
+  width: 560px;
+  }
+  .w-input{
+    width: 100%;
+  }
+  .w-image{
+    width: 500px;
+    height: 200px;
+  
+  }
+}
 
+@media (min-width:768px) and (max-width:991px) {
+  .w-60{
+    width: 80%;
+  }
+  .div-img{
+    height: 150px;
+    width: 600px;
+    }
+    .w-input{
+      width: 80%;
+    }
+    .w-image{
+      width: 550px;
+      height: 200px;
+    
+    }
+ .padding-right{
+  padding-right: 90px;
+ }
+}
+@media (min-width:992px) and (max-width:1199px) {
+  .w-60{
+    width: 70%;
+  }
+  .div-img{
+    height: 150px;
+    width: 680px;
+    }
+    .w-input{
+      width: 70%;
+    }
+    .w-image{
+      width: 600px;
+      height: 200px;
+    }
+ .padding-right{
+  padding-right: 70px;
+  
+ }
 }

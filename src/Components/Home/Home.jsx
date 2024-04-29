@@ -1,14 +1,16 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { storecontext } from '../Context/Context';
 import { useNavigate } from 'react-router-dom';
-import { doc, getDoc, collection, query, where, getDocs,deleteDoc } from "firebase/firestore"; // Add these imports
+import { doc, getDoc, collection, query, where, getDocs, deleteDoc } from "firebase/firestore"; // Add these imports
 import { db } from '../../Firebase/Firebase';
+import CardSkeleton from '../CardSkeleton/CardSkeleton';
 
 const Home = () => {
   const { setSelected } = useContext(storecontext);
   const navigate = useNavigate();
   const [articleData, setArticleData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [refresh, setRefresh] = useState(false); // Add a dummy state variable for triggering refresh
 
   function formatDate(dateString) {
     const options = {
@@ -31,82 +33,71 @@ const Home = () => {
       const querySnapshot = await getDocs(query(collection(db, 'Artciles'), where('categoryName', '==','عام')));
   
       // Iterate through the documents in the query snapshot
+      const newData = [];
       querySnapshot.forEach((doc) => {
         const data = doc.data();
-        console.log("Document data:", data);
-        data.date = formatDate(data.date);
-        // Update state with fetched data
-        setArticleData(prevState => [...prevState, data]);
+        newData.push(data);
       });
   
+      setArticleData(newData);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching documents:", error);
     }
   }
-  
-  
+
   useEffect(() => {
     fetchDataFromFirestoreByCategory();
-  }, []);
+  }, [refresh]); // Add refresh as a dependency to trigger useEffect when refresh state changes
 
   function handleTitleClick(item) {
     setSelected(item);
     navigate('/title');
   }
+
   const deleteArticleFromFirestore = async (firebaseId) => {
     try {
       const articleRef = doc(db, "Artciles", firebaseId);
       await deleteDoc(articleRef);
       console.log("Document successfully deleted:", firebaseId);
+      // Toggle refresh state to trigger useEffect and refetch data
+      setRefresh(prevState => !prevState);
     } catch (error) {
       console.error("Error deleting document:", firebaseId, error);
     }
   };
+
   function UpdateClick(item) {
     setSelected(item);
     navigate('/updateArticle');
   }
   
   return (
-    <div className=' w-60 bg-white my-3 shadow margin'>
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <>
+    <div className=' w-60 bg-white my-3 shadow me-lg-5'>
+      <>
         <h4 className=' px-2 py-2 shadow brdr-top brdr-bottom fw-bolder'>عام</h4>
-        <div className='container-fluid'>
-         
-         {articleData.map((article, index) => (
-           <div key={index} className="row py-3 brdr-bottom ">
-             <div className="col-md-4" onClick={()=>{
-               handleTitleClick(article)
-             }}>
-               <div className='w-img'>
-                 <img src={article?.images?.[0]} alt={`Image`} />
-               </div>
-             </div>
-             <div className="col-md-7" onClick={()=>{
-               handleTitleClick(article)
-             }}>
-               <h3 className='fw-bolder title '>{article.title}</h3>
-              
-               <p className='time'>{article.date}</p>
-              
-             </div>
-             <div className='pt-2'>
-             <button className='btn color px-0' onClick={()=>{
-                 deleteArticleFromFirestore(article.firebaseId)
-               }}><i className="fa-solid fa-trash-can"></i> </button>
-                <button className='btn color px-4' onClick={() => UpdateClick(article)}><i className="fa-solid fa-pencil"></i></button>
-              
-             </div>
-           </div>
-         ))}
-       </div>
-        </>
-
-      )}
+        {loading ? <CardSkeleton cards={10}/> : (
+          <div className='container-fluid'>
+            {articleData.map((article, index) => (
+              <div key={index} className="row py-3 brdr-bottom">
+                <div className="col-md-4" onClick={() => handleTitleClick(article)}>
+                  <div className='w-img'>
+                    <img src={article?.images?.[0]} alt={`Image`} />
+                  </div>
+                </div>
+                <div className="col-md-7 padding-right pe-xl-4 pe-xxl-0" onClick={() => handleTitleClick(article)}>
+                  <h4 className='fw-bolder title '>{article.title}</h4>
+                  <p className='time'>{formatDate(article.date)}</p>
+                </div>
+                <div className='pt-2'>
+                  <button className='btn color px-0' onClick={() => deleteArticleFromFirestore(article.firebaseId)}><i className="fa-solid fa-trash-can"></i> </button>
+                  <button className='btn color px-4' onClick={() => UpdateClick(article)}><i className="fa-solid fa-pencil"></i></button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </>
     </div>
   );
 };

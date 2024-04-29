@@ -135,6 +135,7 @@ const CreateArticle = () => {
       }
   
       setBtnLoading(false);
+      window.history.go(-1); 
     } catch (error) {
       console.error("Error adding document: ", error);
       setBtnLoading(false);
@@ -181,32 +182,18 @@ const CreateArticle = () => {
 
   return (
     <>
-      <div className='padding'>
+      <div className='pe-lg-5'>
         <form onSubmit={article.handleSubmit} className='py-3'>
           <div className='' >
-            <select
-              name="categoryName"
-              value={item}
-              onChange={handleSelectChange}
-              className='my-2 form-control w-50'
-            >
-              <option value="عام">عام</option>
-              <option value="السيارات">السيارات</option>
-              <option value="صناعة و تجارة">صناعة و تجارة</option>
-              <option value="عقارات">عقارات</option>
-              <option value="مالتي ميديا">مالتي ميديا</option>
-              <option value="خدمات">خدمات</option>
-            </select>
-
-
-            <div className='my-2'>
+          <div className='my-2'>
               <label htmlFor="ImageUpload">
 
                 {imgUrl ? (
                   <div className='div-img' style={{ overflow: 'hidden' }}><img src={imgUrl[0]} alt="Profile" className="uploaded-image" />
                   </div>) : (
                   <div className='div-img'>
-                    <div className='placeholder-icon'> <i className="fa-solid fa-plus bg-i" ></i></div>
+                    <div className='placeholder-icon'> <i className="fa-solid fa-plus bg-i" ></i>
+                    </div>
                   </div>
 
                 )}
@@ -221,9 +208,22 @@ const CreateArticle = () => {
                 onChange={handleImageChange}
               />
                 {article.touched.images && article.errors.images && (
-              <div className='alert alert-danger form-control w-50'>{article.errors.images}</div>)}
-              {imageError && <div className="alert alert-danger form-control w-25">{imageError}</div>}
+              <div className='alert alert-danger form-control w-input'>{article.errors.images}</div>)}
+              {imageError && <div className="alert alert-danger form-control w-input">{imageError}</div>}
             </div>
+            <select
+              name="categoryName"
+              value={item}
+              onChange={handleSelectChange}
+              className='my-2 form-control w-input'
+            >
+              <option value="عام">عام</option>
+              <option value="السيارات">السيارات</option>
+              <option value="صناعة و تجارة">صناعة و تجارة</option>
+              <option value="عقارات">عقارات</option>
+              <option value="مالتي ميديا">مالتي ميديا</option>
+              <option value="خدمات">خدمات</option>
+            </select>
             <input
               type="date"
               name="date"
@@ -231,23 +231,22 @@ const CreateArticle = () => {
               onChange={article.handleChange}
               onBlur={article.handleBlur}
               placeholder="Date"
-              className='form-control w-50 my-2'
+              className='form-control  my-2 w-input'
             />
 
             {article.touched.date && article.errors.date && (
-              <div className='alert alert-danger form-control w-25'>{article.errors.date}</div>
+              <div className='alert alert-danger form-control w-input '>{article.errors.date}</div>
             )}
             <input
               type="text"
               name="title"
               value={article.values.title}
               onChange={article.handleChange}
-
               placeholder="عنوان"
-              className='form-control w-50 my-2'
+              className='form-control my-2 w-input'
             />
             {article.touched.title && article.errors.title && (
-              <div className='alert alert-danger form-control w-25'>{article.errors.title}</div>
+              <div className='alert alert-danger form-control w-input'>{article.errors.title}</div>
             )}
             {showTextarea ? <textarea
               name="description"
@@ -257,11 +256,11 @@ const CreateArticle = () => {
               onChange={article.handleChange}
 
               placeholder="مقال..."
-              className='form-control w-50 my-2'
+              className='form-control my-2 w-input'
             /> : ''}
 
             {article.touched.description && article.errors.description && (
-              <div className='alert alert-danger form-control w-25'>{article.errors.description}</div>
+              <div className='alert alert-danger form-control w-input'>{article.errors.description}</div>
             )}
 
 
@@ -274,11 +273,11 @@ const CreateArticle = () => {
               onChange={article.handleChange}
 
               placeholder="Youtube URL"
-              className='form-control w-25 my-2'
+              className='form-control my-2 w-input'
             /> : ''}
 
             {article.touched.youtubeUrl && article.errors.youtubeUrl && (
-              <div className='alert alert-danger form-control w-25'>{article.errors.youtubeUrl}</div>
+              <div className='alert alert-danger form-control w-input'>{article.errors.youtubeUrl}</div>
             )}
 
             <button className='my-2 main-bg btn  text-white fw-bolder but' type="submit" >{btnloading ? <Loading /> : 'إنشاء مقال'}</button> {/* Disable submit button during upload */}

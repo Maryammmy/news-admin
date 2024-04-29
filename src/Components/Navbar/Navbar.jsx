@@ -5,7 +5,7 @@ export default function Navbar() {
   return (
     <div>
       <nav className="navbar navbar-expand-lg bg-white">
-        <div className="container-fluid mx-5 px-5">
+        <div className="container-fluid ">
 
 
           <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -15,10 +15,7 @@ export default function Navbar() {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
               <li className="nav-item">
-                {/* <NavLink className="nav-link" to="عام" >
-                  <i className="fa-solid fa-house-chimney basic-background italic px-2 py-1" />
-
-                </NavLink> */}
+              
               </li>
               <li className="nav-item">
                 <NavLink to='عام' className="nav-link">

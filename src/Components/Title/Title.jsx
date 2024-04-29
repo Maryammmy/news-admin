@@ -4,7 +4,20 @@ import YouTube from 'react-youtube';
 
 export default function Title() {
   const { selected } = useContext(storecontext);
-  console.log(selected)
+  function formatDate(dateString) {
+    const options = {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true,
+      localeMatcher: 'best fit',
+    };
+    const date = new Date(dateString);
+    return date.toLocaleDateString('ar-EG', options);
+  }
   const extractVideoId = (link) => {
     if (link.includes('youtu.be')) {
       const videoId = link.split('youtu.be/')[1].split('?')[0];
@@ -18,10 +31,10 @@ export default function Title() {
     }
   };
   return (
-    <div className=' w-60 bg-white my-3 shadow margin'>
+    <div className=' w-60 bg-white my-3 shadow me-lg-5'>
       <h4 className='px-2 py-2 shadow brdr-top brdr-bottom fw-bolder'>{selected?.categoryName == 'مالتي ميديا' ? 'انفوجراف' : selected?.categoryName}</h4>
       <div className='container-fluid'>
-        <div className="row py-3 px-2"  >
+        <div className="row py-3 px-2 "  >
           <div className="col-md-12">
             <h3 className='fw-bolder title'>{selected?.title}</h3>
           </div>
@@ -46,7 +59,7 @@ export default function Title() {
            :'' }
           </div>
           <div className="col-md-12 py-1">
-            <p className='time'>{selected?.date}</p>
+            <p className='time'>{formatDate(selected?.date)}</p>
           </div>
         </div>
       </div>
