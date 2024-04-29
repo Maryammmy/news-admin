@@ -182,9 +182,13 @@ object-fit: cover;
   .w-60{
     width: 100%;
   }
+  .w-img{
+    width: 200px;
+    height: 100px;
+  }
   .div-img{
     height: 150px;
-    width: 300px;
+    width: 350px;
     }
     .w-input{
       width: 100%;
