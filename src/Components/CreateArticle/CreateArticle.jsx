@@ -14,16 +14,24 @@ import Modal from 'react-modal';
 const CreateArticle = () => {
   const [img, setImg] = useState([]);
   const [imgUrl, setImgUrl] = useState('');
+  const [subimg, setSubImg] = useState([]);
+  const [subimgUrl, setSubImgUrl] = useState('');
   const [imageError, setImageError] = useState('');
+  const [subImageError, setSubImageError] = useState('');
   const [loading, setLoading] = useState(false);
   const [btnloading, setBtnLoading] = useState(false);
   const [item, setItem] = useState('عام');
+  const [subItem, setSubItem] = useState('انفوجراف');
   const [showTextarea, setShowTextarea] = useState(true);
+  const [showSubCategory, setShowSubCategory] = useState(false);
   const [showYoutubeUrl, setShowYoutubeUrl] = useState(false);
+  const [showImage, setShowImage] = useState(false);
   const today = new Date().toISOString().split('T')[0];
   const [categoryId, setCategoryId] = useState(1)
   const [showModal, setShowModal] = useState('')
-
+console.log('url',showYoutubeUrl)
+console.log('img',showImage)
+console.log('categoty',showSubCategory)
   const handleImageChange = async (event) => {
     const selectedImages = event.target.files;
 
@@ -69,15 +77,59 @@ const CreateArticle = () => {
       setLoading(false);
     }
   };
+  const handleSubImageChange = async (event) => {
+    const selectedImages = event.target.files;
 
+    // Check if any image is selected
+    if (!selectedImages || selectedImages.length === 0) {
+      setSubImageError('Image is required');
+      return;
+    }
+
+    // Check if all selected files are images
+    const isValidImages = Array.from(selectedImages).every((image) =>
+      ['image/jpeg', 'image/png', 'image/gif', 'image/svg+xml', 'image/webp'].includes(image.type)
+    );
+
+    // If not all selected files are images, set error and return
+    if (!isValidImages) {
+      setSubImageError('Invalid file format.');
+      return;
+    }
+
+    // If everything is valid, proceed with uploading
+    setSubImg(Array.from(selectedImages));
+    setLoading(true);
+    setSubImageError(''); // Clear previous error message
+    try {
+      const uploadedImageUrls = await Promise.all(
+        Array.from(selectedImages).map(async (image) => {
+          const fileName = v4();
+          const finalFileName = fileName.endsWith('.jpg') ? fileName : `${fileName}.jpg`;
+          const imgRef = ref(storage, `images/${finalFileName}`);
+          await uploadBytes(imgRef, image);
+          const url = await getDownloadURL(imgRef);
+          setLoading(false)
+          return url;
+        })
+      );
+      setSubImgUrl(uploadedImageUrls);
+    } catch (error) {
+      console.error("Error uploading images: ", error);
+      setSubImageError('Failed to upload image(s).');
+      setLoading(false)
+    } finally {
+      setLoading(false);
+    }
+  };
   const handleSelectChange = (e) => {
     setItem(e.target.value);
     if (e.target.value === "مالتي ميديا") {
       setShowTextarea(false);
-      setShowYoutubeUrl(true);
+      setShowSubCategory(true);
     } else {
       setShowTextarea(true);
-      setShowYoutubeUrl(false);
+      setShowSubCategory(false);
     }
     switch (e.target.value) {
       case "عام":
@@ -104,6 +156,16 @@ const CreateArticle = () => {
     }
 
   };
+  const handleSubSelectChange = (e) => {
+    setSubItem(e.target.value);
+    if (e.target.value === 'انفوجراف') {
+      setShowImage(true);
+      setShowYoutubeUrl(false);
+    } else {
+      setShowImage(false);
+      setShowYoutubeUrl(true);
+    }
+  };
   const closeModal = () => {
     if (!loading) {
       setShowModal(false);
@@ -117,7 +179,7 @@ const CreateArticle = () => {
       if (imgUrl.length > 0) {
         const articleWithImageUrlsAndCategoryId = {
           ...articleData,
-          // images: imgUrl,
+          subCategory: subItem,
           categoryName: item,
           categoryId: categoryId
         };
@@ -147,6 +209,28 @@ const CreateArticle = () => {
       article.setFieldValue("images", imgUrl);
     }
   }, [imgUrl]);
+  useEffect(() => {
+    if (subimgUrl.length > 0) {
+      article.setFieldValue("subImage", subimgUrl);
+    }
+  }, [subimgUrl]);
+  useEffect(() => {
+    if (showSubCategory && subItem === "انفوجراف") {
+      setShowImage(true);
+    
+    } else {
+      setShowImage(false); // Ensure setShowImage is false if the condition isn't met
+      
+    }
+    if (showSubCategory && subItem ==="فيديو" ) {
+      setShowYoutubeUrl(true);
+    
+    } else {
+      setShowYoutubeUrl(false); // Ensure setShowImage is false if the condition isn't met
+      
+    }
+  }, [showSubCategory, subItem]);
+  
   function validation() {
     let schema = yup.object().shape({
       date: yup.date().required('Date is required'),
@@ -154,12 +238,18 @@ const CreateArticle = () => {
       images: yup.mixed().required('Image is required')
     });
 
-    if (showYoutubeUrl) {
+    if (showSubCategory=='فيديو') {
       schema = schema.shape({
         youtubeUrl: yup.string().url('Invalid URL format for Youtube').required('Youtube URL is required'),
       });
     }
-    else {
+    
+    if (showSubCategory=='انفوجراف') {
+      schema = schema.shape({
+        subImage: yup.mixed().required('Image is required'),
+      });
+    }
+    if(showSubCategory==false) {
       schema = schema.shape({
         description: yup.string().required('Description is required'),
       });
@@ -173,8 +263,8 @@ const CreateArticle = () => {
       date: today,
       description: '',
       youtubeUrl: '',
-      images:null
-     
+      images:null,
+      subImage:null 
     },
     validationSchema: validation,
     onSubmit: (values) => addArticleToFirestore(values)
@@ -224,6 +314,14 @@ const CreateArticle = () => {
               <option value="مالتي ميديا">مالتي ميديا</option>
               <option value="خدمات">خدمات</option>
             </select>
+          {showSubCategory?  <select
+              name="subCategory"
+              value={subItem}
+              onChange={handleSubSelectChange}
+              className='my-2 form-control w-input'>
+              <option value="انفوجراف">انفوجراف</option>
+              <option value="فيديو">فيديو</option>
+            </select>:''}
             <input
               type="date"
               name="date"
@@ -263,9 +361,6 @@ const CreateArticle = () => {
               <div className='alert alert-danger form-control w-input'>{article.errors.description}</div>
             )}
 
-
-
-
             {showYoutubeUrl ? <input
               type="text"
               name="youtubeUrl"
@@ -279,7 +374,32 @@ const CreateArticle = () => {
             {article.touched.youtubeUrl && article.errors.youtubeUrl && (
               <div className='alert alert-danger form-control w-input'>{article.errors.youtubeUrl}</div>
             )}
+{showImage?  <div className='my-2'>
+              <label htmlFor="SubImageUpload">
 
+                {subimgUrl ? (
+                  <div className='div-img' style={{ overflow: 'hidden' }}><img src={subimgUrl[0]} alt="SubImage" className="uploaded-image" />
+                  </div>) : (
+                  <div className='div-img'>
+                    <div className='placeholder-icon'> <i className="fa-solid fa-plus bg-i" ></i>
+                    </div>
+                  </div>
+
+                )}
+
+
+              </label>
+              <input
+                id="SubImageUpload"
+                type="file"
+                accept='image/*'
+                style={{ display: "none" }}
+                onChange={handleSubImageChange}
+              />
+                {article.touched.subImage && article.errors.subImage && (
+              <div className='alert alert-danger form-control w-input'>{article.errors.subImage}</div>)}
+              {subImageError && <div className="alert alert-danger form-control w-input">{subImageError}</div>}
+            </div>:''}
             <button className='my-2 main-bg btn  text-white fw-bolder but' type="submit" >{btnloading ? <Loading /> : 'إنشاء مقال'}</button> {/* Disable submit button during upload */}
           </div>
         </form>
