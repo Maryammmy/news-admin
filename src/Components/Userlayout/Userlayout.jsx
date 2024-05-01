@@ -12,7 +12,7 @@ export default function Userlayout() {
       <Top />
       <Header />
       <Navbar />
-      <Outlet />
+      <div className='min-h'><Outlet /></div>
       <Contact />
       <Footer />
 

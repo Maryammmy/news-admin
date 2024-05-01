@@ -14,18 +14,18 @@ import Modal from 'react-modal';
 const CreateArticle = () => {
   const [img, setImg] = useState([]);
   const [imgUrl, setImgUrl] = useState('');
-  const [subimg, setSubImg] = useState([]);
-  const [subimgUrl, setSubImgUrl] = useState('');
   const [imageError, setImageError] = useState('');
-  const [subImageError, setSubImageError] = useState('');
   const [loading, setLoading] = useState(false);
   const [btnloading, setBtnLoading] = useState(false);
   const [item, setItem] = useState('عام');
-  const [subItem, setSubItem] = useState('انفوجراف');
   const [showTextarea, setShowTextarea] = useState(true);
   const [showSubCategory, setShowSubCategory] = useState(false);
+  const [subItem, setSubItem] = useState('انفوجراف');
   const [showYoutubeUrl, setShowYoutubeUrl] = useState(false);
+  const [subimg, setSubImg] = useState([]);
+  const [subimgUrl, setSubImgUrl] = useState('');
   const [showImage, setShowImage] = useState(false);
+  const [subImageError, setSubImageError] = useState('');
   const today = new Date().toISOString().split('T')[0];
   const [categoryId, setCategoryId] = useState(1)
   const [showModal, setShowModal] = useState('')
@@ -220,6 +220,7 @@ console.log('categoty',showSubCategory)
     
     } else {
       setShowImage(false); // Ensure setShowImage is false if the condition isn't met
+    
       
     }
     if (showSubCategory && subItem ==="فيديو" ) {
@@ -279,7 +280,7 @@ console.log('categoty',showSubCategory)
               <label htmlFor="ImageUpload">
 
                 {imgUrl ? (
-                  <div className='div-img' style={{ overflow: 'hidden' }}><img src={imgUrl[0]} alt="Profile" className="uploaded-image" />
+                  <div className='div-img' style={{ overflow: 'hidden' }}><img src={imgUrl[0]} alt="Image" className="uploaded-image" />
                   </div>) : (
                   <div className='div-img'>
                     <div className='placeholder-icon'> <i className="fa-solid fa-plus bg-i" ></i>

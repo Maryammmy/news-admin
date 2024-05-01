@@ -1,5 +1,6 @@
 body {
   margin: 0;
+  padding: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   direction: rtl;
@@ -9,6 +10,9 @@ body {
   font-weight:500;
   font-style: normal;
   font-variation-settings: "slnt" 0;
+}
+.min-h{
+  min-height: 300px;
 }
 .direction{
   direction: ltr;

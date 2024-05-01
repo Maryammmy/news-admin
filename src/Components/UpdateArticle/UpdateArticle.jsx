@@ -19,14 +19,23 @@ const UpdateArticle = () => {
   const [imageError, setImageError] = useState('');
   const [loading, setLoading] = useState(false);
   const [btnloading, setBtnLoading] = useState(false);
-  const [item, setItem] = useState(selected.categoryName);
+  const [item, setItem] = useState(selected?.categoryName);
   const [showTextarea, setShowTextarea] = useState(false);
-  const [showYoutubeUrl, setShowYoutubeUrl] = useState(false);
   const today = new Date().toISOString().split('T')[0];
-  const [categoryId, setCategoryId] = useState(selected.categoryId)
+  const [categoryId, setCategoryId] = useState(selected?.categoryId)
   const [showModal, setShowModal] = useState('')
-console.log(selected)
-
+  const [showSubCategory, setShowSubCategory] = useState(false);
+  const [subItem, setSubItem] = useState(selected?.subCategory);
+  const [showYoutubeUrl, setShowYoutubeUrl] = useState(false);
+  const [subimg, setSubImg] = useState([]);
+  const [subimgUrl, setSubImgUrl] = useState('');
+  const [showImage, setShowImage] = useState(false);
+  const [subImageError, setSubImageError] = useState('');
+console.log(selected.images)
+console.log('url',showYoutubeUrl)
+console.log('img',showImage)
+console.log('categoty',showSubCategory)
+console.log('item',selected.categoryName)
 
   const handleImageChange = async (event) => {
     const selectedImages = event.target.files;
@@ -76,15 +85,59 @@ console.log(selected)
       setLoading(false);
     }
   };
+  const handleSubImageChange = async (event) => {
+    const selectedImages = event.target.files;
+
+    // Check if any image is selected
+    if (!selectedImages || selectedImages.length === 0) {
+      setSubImageError('Image is required');
+      return;
+    }
+
+    // Check if all selected files are images
+    const isValidImages = Array.from(selectedImages).every((image) =>
+      ['image/jpeg', 'image/png', 'image/gif', 'image/svg+xml', 'image/webp'].includes(image.type)
+    );
+
+    // If not all selected files are images, set error and return
+    if (!isValidImages) {
+      setSubImageError('Invalid file format.');
+      return;
+    }
+
+    // If everything is valid, proceed with uploading
+    setSubImg(Array.from(selectedImages));
+    setLoading(true);
+    setSubImageError(''); // Clear previous error message
+    try {
+      const uploadedImageUrls = await Promise.all(
+        Array.from(selectedImages).map(async (image) => {
+          const fileName = v4();
+          const finalFileName = fileName.endsWith('.jpg') ? fileName : `${fileName}.jpg`;
+          const imgRef = ref(storage, `images/${finalFileName}`);
+          await uploadBytes(imgRef, image);
+          const url = await getDownloadURL(imgRef);
+          setLoading(false)
+          return url;
+        })
+      );
+      setSubImgUrl(uploadedImageUrls);
+    } catch (error) {
+      console.error("Error uploading images: ", error);
+      setSubImageError('Failed to upload image(s).');
+      setLoading(false)
+    } finally {
+      setLoading(false);
+    }
+  };
   const handleSelectChange = (e) => {
     setItem(e.target.value);
-
-    if (e.target.value == "مالتي ميديا") {
+    if (e.target.value === "مالتي ميديا") {
       setShowTextarea(false);
-      setShowYoutubeUrl(true);
+      setShowSubCategory(true);
     } else {
       setShowTextarea(true);
-      setShowYoutubeUrl(false);
+      setShowSubCategory(false);
     }
     switch (e.target.value) {
       case "عام":
@@ -109,8 +162,17 @@ console.log(selected)
         setCategoryId(1)
         break;
     }
-    // article.setFieldValue("categoryName", item);
-    //   article.setFieldValue("categoryId", categoryId);
+
+  };
+  const handleSubSelectChange = (e) => {
+    setSubItem(e.target.value);
+    if (e.target.value === 'انفوجراف') {
+      setShowImage(true);
+      setShowYoutubeUrl(false);
+    } else {
+      setShowImage(false);
+      setShowYoutubeUrl(true);
+    }
   };
   const closeModal = () => {
     if (!loading) {
@@ -138,18 +200,22 @@ console.log(selected)
       images: yup.mixed().required('Image is required')
     
     });
-  
-    // Adjust schema shape based on showYoutubeUrl condition
-    if (showYoutubeUrl) {
+    if (showSubCategory=='فيديو') {
       schema = schema.shape({
-        youtubeUrl: yup.string().url('Invalid URL format for Youtube').required('Youtube URL is required')
-      });
-    } else {
-      schema = schema.shape({
-        description: yup.string().required('Description is required')
+        youtubeUrl: yup.string().url('Invalid URL format for Youtube').required('Youtube URL is required'),
       });
     }
-  
+    
+    if (showSubCategory=='انفوجراف') {
+      schema = schema.shape({
+        subImage: yup.mixed().required('Image is required'),
+      });
+    }
+    if(showSubCategory==false) {
+      schema = schema.shape({
+        description: yup.string().required('Description is required'),
+      });
+    }
     return schema;
   }
   
@@ -159,23 +225,26 @@ console.log(selected)
       title: selected?.title,
       date: selected?.date,
       description: selected?.description,
-      youtubeUrl: selected?.youtubeUrl,
-      images: [selected?.images?.[0]],
+      youtubeUrl: selected?.youtubeUrl ,
+      images: selected?.images,
       categoryId: categoryId,
       categoryName: item,
       firebaseId: selected?.firebaseId,
+      subCategory:subItem,
+      subImage:selected?.subImage,
+
     },
     validationSchema: validation,
-    onSubmit: (values) => updateArticleInFirestore(values)
+    onSubmit: (values) =>updateArticleInFirestore(values)
   });
   useEffect(() => {
     if (item === "مالتي ميديا") {
       setShowTextarea(false);
-      setShowYoutubeUrl(true);
+      setShowSubCategory(true);
     }
     else {
       setShowTextarea(true);
-      setShowYoutubeUrl(false);
+      setShowSubCategory(false);
     }
   }, [])
   useEffect(() => {
@@ -188,8 +257,28 @@ console.log(selected)
     // Set article values after categoryId is updated
     article.setFieldValue("categoryName", item);
     article.setFieldValue("categoryId", categoryId);
+    article.setFieldValue("subCategory",subItem)
   }, [item, categoryId]);
-
+  useEffect(() => {
+    if (showSubCategory && subItem === "انفوجراف") {
+      setShowImage(true);
+    
+    } else {
+      setShowImage(false); // Ensure setShowImage is false if the condition isn't met  
+    }
+    if (showSubCategory && subItem ==="فيديو" ) {
+      setShowYoutubeUrl(true);
+    
+    } else {
+      setShowYoutubeUrl(false); // Ensure setShowImage is false if the condition isn't met
+      
+    }
+  }, [showSubCategory, subItem]);
+  useEffect(() => {
+    if (subimgUrl.length > 0) {
+      article.setFieldValue("subImage", subimgUrl);
+    }
+  }, [subimgUrl]);
   return (
     <>
       <div className='pe-lg-5' >
@@ -199,7 +288,7 @@ console.log(selected)
               <label htmlFor="ImageUpload">
 
                 {imgUrl ? (
-                  <div className='div-img' style={{ overflow: 'hidden' }}><img src={imgUrl[0]} alt="Profile" className="uploaded-image" />
+                  <div className='div-img' style={{ overflow: 'hidden' }}><img src={imgUrl[0]} alt="Image" className="uploaded-image" />
                   </div>) : (
                   <div className='div-img'>
                     <img src={selected?.images?.[0]} alt="placeholder" className="uploaded-image"/>
@@ -234,6 +323,14 @@ console.log(selected)
               <option value="مالتي ميديا">مالتي ميديا</option>
               <option value="خدمات">خدمات</option>
             </select>
+            {showSubCategory?  <select
+              name="subCategory"
+              value={article.values.subCategory}
+              onChange={handleSubSelectChange}
+              className='my-2 form-control w-input'>
+              <option value="انفوجراف">انفوجراف</option>
+              <option value="فيديو">فيديو</option>
+            </select>:''}
             <input
               type="date"
               name="date"
@@ -289,6 +386,31 @@ console.log(selected)
             {article.touched.youtubeUrl && article.errors.youtubeUrl && (
               <div className='alert alert-danger form-control w-input'>{article.errors.youtubeUrl}</div>
             )}
+            {showImage?  <div className='my-2'>
+              <label htmlFor="SubImageUpload">
+
+                {subimgUrl ? (
+                  <div className='div-img' style={{ overflow: 'hidden' }}><img src={subimgUrl[0]} alt="SubImage" className="uploaded-image" />
+                  </div>) : (
+                   <div className='div-img'>
+                   <img src={selected?.subImage?.[0]} alt="Image" className="uploaded-image"/>
+                 </div>
+
+                )}
+
+
+              </label>
+              <input
+                id="SubImageUpload"
+                type="file"
+                accept='image/*'
+                style={{ display: "none" }}
+                onChange={handleSubImageChange}
+              />
+                {article.touched.subImage && article.errors.subImage && (
+              <div className='alert alert-danger form-control w-input'>{article.errors.subImage}</div>)}
+              {subImageError && <div className="alert alert-danger form-control w-input">{subImageError}</div>}
+            </div>:''}
 
             <button className='my-2 btn  text-white fw-bolder but' type="submit" >{btnloading ? <Loading /> : 'تعديل مقال'}</button> {/* Disable submit button during upload */}
           </div>

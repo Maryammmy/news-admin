@@ -27,11 +27,11 @@ export default function Contact() {
      
       <div className="container">
       <div className='row justify-content-center align-items-center py-3 text-center'>
-        <div className='col-md-1 '><a href="عام" className=' text-decoration-none text-black fw-bolder'>عام</a></div>
+        <div className='col-md-1'><a href="عام" className=' text-decoration-none text-black fw-bolder'>عام</a></div>
         <div  className='col-md-1'><a href="السيارات" className=' text-decoration-none text-black fw-bolder'>السيارات</a></div>
-        <div  className='col-md-1 p-xl-1'><a href="صناعة و تجارة" className=' text-decoration-none text-black fw-bolder'>صناعة و تجارة</a></div>
+        <div  className='col-md-1 p-lg-1 me-md-4 me-lg-0'><a href="صناعة و تجارة" className=' text-decoration-none text-black fw-bolder'>صناعة و تجارة</a></div>
         <div  className='col-md-1'><a href="عقارات" className=' text-decoration-none text-black fw-bolder'>عقارات</a></div>
-        <div  className='col-md-1 p-xl-1'><a href="مالتي ميديا" className=' text-decoration-none text-black fw-bolder'>مالتي ميديا</a></div>
+        <div  className='col-md-1 p-lg-1 me-md-2 me-lg-0'><a href="مالتي ميديا" className=' text-decoration-none text-black fw-bolder'>مالتي ميديا</a></div>
         <div  className='col-md-1'><a href="خدمات" className=' text-decoration-none text-black fw-bolder'>خدمات</a></div>
 
       

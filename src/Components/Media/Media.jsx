@@ -9,6 +9,7 @@ const Media = () => {
   const { setSelected } = useContext(storecontext);
   const navigate = useNavigate();
   const [articleData, setArticleData] = useState([]);
+  const [subItem, setSubItem] = useState('انفوجراف');
   const [loading, setLoading] = useState(true);
   const [refresh, setRefresh] = useState(false); // Add a dummy state variable for triggering refresh
 
@@ -29,27 +30,31 @@ const Media = () => {
 
   async function fetchDataFromFirestoreByCategory() {
     try {
-      // Query the Firestore collection where categoryName is equal to 'عام'
-      const querySnapshot = await getDocs(query(collection(db, 'Artciles'), where('categoryName', '==','مالتي ميديا')));
-  
-      // Iterate through the documents in the query snapshot
+      let querySnapshot;
+      if (subItem === 'انفوجراف') {
+        querySnapshot = await getDocs(query(collection(db, 'Artciles'), where('subCategory', '==', 'انفوجراف')));
+      } else if (subItem === 'فيديو') {
+        querySnapshot = await getDocs(query(collection(db, 'Artciles'), where('subCategory', '==', 'فيديو')));
+      }
+
       const newData = [];
       querySnapshot.forEach((doc) => {
         const data = doc.data();
-       
         newData.push(data);
       });
-  
+
       setArticleData(newData);
       setLoading(false);
+
     } catch (error) {
       console.error("Error fetching documents:", error);
     }
   }
 
+
   useEffect(() => {
     fetchDataFromFirestoreByCategory();
-  }, [refresh]); // Add refresh as a dependency to trigger useEffect when refresh state changes
+  }, [refresh, subItem]); // Add refresh as a dependency to trigger useEffect when refresh state changes
 
   function handleTitleClick(item) {
     setSelected(item);
@@ -72,12 +77,23 @@ const Media = () => {
     setSelected(item);
     navigate('/updateArticle');
   }
-  
+  const handleSubSelectChange = (e) => {
+    setSubItem(e.target.value);
+    console.log(subItem)
+  };
   return (
     <div className=' w-60 bg-white my-3 shadow me-lg-5'>
       <>
         <h4 className=' px-2 py-2 shadow brdr-top brdr-bottom fw-bolder'>مالتي ميديا</h4>
-        {loading ? <CardSkeleton cards={10}/> : (
+        <select
+          name="subCategory"
+          value={subItem}
+          onChange={handleSubSelectChange}
+          className='my-2 form-control w-input'>
+          <option value="انفوجراف">انفوجراف</option>
+          <option value="فيديو">فيديو</option>
+        </select>
+        {loading ? <CardSkeleton cards={10} /> : (
           <div className='container-fluid'>
             {articleData.map((article, index) => (
               <div key={index} className="row py-3 brdr-bottom px-3">
@@ -87,7 +103,7 @@ const Media = () => {
                   </div>
                 </div>
                 <div className="col-md-7 padding-right pe-xl-4 pe-xxl-0" onClick={() => handleTitleClick(article)}>
-                <h4 className='fw-bolder title pt-3 pt-md-0'>{article.subCategory}</h4>
+
                   <h4 className='fw-bolder title pt-3 pt-md-0'>{article.title}</h4>
                   <p className='time'>{formatDate(article.date)}</p>
                 </div>
