@@ -89,7 +89,7 @@ const Media = () => {
           name="subCategory"
           value={subItem}
           onChange={handleSubSelectChange}
-          className='my-2 form-control w-input'>
+          className='my-3 form-control w-input'>
           <option value="انفوجراف">انفوجراف</option>
           <option value="فيديو">فيديو</option>
         </select>
